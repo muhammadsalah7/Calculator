@@ -8,7 +8,6 @@ function buttonClick(value) {
   }
   rerender();
 }
-
 function handleNumber(number) {
   if (buffer === "0") {
     buffer = number;
@@ -16,11 +15,29 @@ function handleNumber(number) {
     buffer += number;
   }
 }
-
 function handleSymbol(symbol) {
-  console.log("symbol");
+  switch (symbol) {
+    case "C":
+      buffer = "0";
+      break;
+    case "=":
+      console.log("equals");
+      break;
+    case "←":
+      if (buffer.length === 1) {
+        buffer = "0";
+      } else {
+        buffer = buffer.slice(0, -1);
+      }
+      break;
+    case "+":
+    case "-":
+    case "÷":
+    case "×":
+      console.log("math symbol");
+      break;
+  }
 }
-
 function init() {
   document
     .querySelector(".calc-buttons")
