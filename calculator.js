@@ -1,4 +1,6 @@
 let buffer = "0";
+let total = 0;
+let previousOperator = null;
 const screen = document.querySelector(".screen");
 function buttonClick(value) {
   if (isNaN(parseInt(value))) {
@@ -8,6 +10,31 @@ function buttonClick(value) {
   }
   rerender();
 }
+function handleMath(value) {
+  if (buffer === "0") {
+    return;
+  }
+  const intBuffer = parseInt(buffer);
+  if (total === 0) {
+    total = intBuffer;
+  } else {
+    mathOperation(intBuffer);
+  }
+  previousOperator = value;
+  buffer = "0";
+}
+function mathOperation(intBuffer) {
+  if (previousOperator === "+") {
+    total += intBuffer;
+  } else if (previousOperator === "-") {
+    total -= intBuffer;
+  } else if (previousOperator === "÷") {
+    total /= intBuffer;
+  } else if (previousOperator === "×") {
+    total *= intBuffer;
+  }
+}
+
 function handleNumber(number) {
   if (buffer === "0") {
     buffer = number;
@@ -21,7 +48,13 @@ function handleSymbol(symbol) {
       buffer = "0";
       break;
     case "=":
-      console.log("equals");
+      if (previousOperator === null) {
+        return;
+      }
+      mathOperation(parseInt(buffer));
+      previousOperator = null;
+      buffer = "" + total;
+      total = 0;
       break;
     case "←":
       if (buffer.length === 1) {
@@ -34,7 +67,7 @@ function handleSymbol(symbol) {
     case "-":
     case "÷":
     case "×":
-      console.log("math symbol");
+      handleMath(symbol);
       break;
   }
 }
